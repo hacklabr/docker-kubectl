@@ -14,7 +14,7 @@ RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add 
 
 # Install kubectl
 RUN apt-get update \
-    && apt-get install -y kubectl
+    && apt-get install -y kubectl zip
 
 # Clean up
 RUN rm -rf /var/lib/apt/lists/*
