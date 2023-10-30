@@ -1,4 +1,4 @@
-FROM debian:stretch-slim
+FROM debian:stable-slim
 LABEL mantainer "hacklab/ <contato@hacklab.com.br>"
 
 # Install assist tools for kubectl
@@ -9,12 +9,13 @@ RUN apt-get update &&\
         gnupg
 
 # Add the official kubectl repository
-RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - &&\
-    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
+RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
+	echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
+
 
 # Install kubectl
-RUN apt-get update \
-    && apt-get install -y kubectl zip
+RUN apt update \
+    && apt install --no-install-recommends -y kubectl zip awscli 
 
 # Clean up
-RUN rm -rf /var/lib/apt/lists/*
+RUN apt clean && rm -rf /var/lib/apt/lists/*
